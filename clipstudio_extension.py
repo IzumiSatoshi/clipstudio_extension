@@ -7,8 +7,13 @@ import keyboard
 import psutil
 import pandas as pd
 
-create_sub_window_hotkey = 'alt+a'
-set_sub_window_rect_hotkey ='alt+p' 
+# 呼び出す時に使うホットキー
+create_sub_window_hotkey = 'alt+a' #新規ウィンドウの作成
+set_sub_window_rect_hotkey ='alt+p' #ウィンドウの位置を記憶
+# クリスタ側のホットキー
+new_window_hotkey = 'ctrl+shift+alt+p' #新規ウィンドウの作成
+resize_area_hotkey = 'ctrl+shift+alt+o' #キャンバス全体を表示
+
 step_px = 10
 # アクティブなタブを探すときの、最初のピクセル
 start_pixel = (0,60)
@@ -31,7 +36,7 @@ def activate_clipstudio():
     # クリスタが起動しているかどうかを確認
     for proc in psutil.process_iter():
         try:
-            if proc.exe() == r"C:\Program Files\CELSYS\CLIP STUDIO 1.5\CLIP STUDIO PAINT\CLIPStudioPaint.exe":
+            if proc.exe() == exefile:
                 print('クリップスタジオペイントは、既に起動済みです')
                 return proc
         except psutil.AccessDenied:
@@ -54,7 +59,7 @@ def create_sub_window():
     win_size = pyautogui.size()
     # いったんセンターにドラッグ
     center_pix = (900,500)
-    keyboard.send('ctrl+shift+alt+p')
+    keyboard.send(new_window_hotkey)
     time.sleep(0.5)
     # 左からstep_pxごとに色を見ていって、アクティブなタブを見つけたら、引っ張り出す
     current_x = start_pixel[0]
@@ -71,7 +76,7 @@ def create_sub_window():
             win32gui.MoveWindow(hwnd, *rect_pos,*rect_size, True)
             break
         current_x += step_px
-    keyboard.send('ctrl+shift+alt+o')
+    keyboard.send(resize_area_hotkey)
     print('新規ウィンドウを作成しました')
 
 
